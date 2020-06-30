@@ -50,19 +50,16 @@ class Hangman
             guess_letter
             check_secret_word
         end
+        @games_played += 1
         show_board
         complete_game
-        self.games_played += 1
     end
-
-    # private
 
     def clear_for_new_game
         set_secret_word
         set_word_in_progress
         reset_letters_and_turns
     end
-
 
     def start_game
         puts "would you like to load an existing game, or start a new one: LOAD / NEW ?"
@@ -77,6 +74,11 @@ class Hangman
             puts "please choose LOAD or NEW "
             start_game
         end
+    end
+
+    def show_game_stats
+        percentage = (@wins.to_f/@games_played.to_f)
+        puts "In this game you have played #{@games_played} times and won #{@wins}. Thats a #{percentage.round(2) * 100}% winning average"
     end
 
     def set_secret_word
@@ -159,6 +161,7 @@ class Hangman
             puts @loser_statements.shuffle.last
             puts "The word was: #{@secret_word}"
         end
+        show_game_stats
 
         play_more = "no"
         puts "Want to play again?"
@@ -204,8 +207,6 @@ class Hangman
         game = Marshal::load(game)
         game.play
     end
-
-
 end
 
 game = Hangman.new("Peter", 7, "5desk_FILTERED.txt")
